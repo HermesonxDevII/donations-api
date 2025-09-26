@@ -58,7 +58,7 @@ class Donation(DonationBase):
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes  = True
 
 class Company(CompanyBase):
     id: int
@@ -66,7 +66,7 @@ class Company(CompanyBase):
     donations_made: List[Donation] = []
 
     class Config:
-        orm_mode = True
+        from_attributes  = True
 
 class Institution(InstitutionBase):
     id: int
@@ -74,7 +74,7 @@ class Institution(InstitutionBase):
     donations_received: List[Donation] = []
     
     class Config:
-        orm_mode = True
+        from_attributes  = True
 
 class User(UserBase):
     id: int
@@ -85,7 +85,7 @@ class User(UserBase):
     institution: Optional[Institution] = None
 
     class Config:
-        orm_mode = True
+        from_attributes  = True
 
 class Token(BaseModel):
     access_token: str
