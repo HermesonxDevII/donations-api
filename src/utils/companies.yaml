@@ -1,0 +1,25 @@
+companies.py
+  Listagem
+    Requisição: GET|HEAD
+    Rota: /companies
+    Nome da função: index()
+
+  Listar especifico
+    Requisição: GET|HEAD
+    Rota: /companies/{company}
+    Nome da função: show()
+
+  Criar
+    Requisição: POST
+    Rota: /companies
+    Nome da função: store()
+
+  Atualizar
+    Requisição: PUT|PATCH
+    Rota: /companies/{company}
+    Nome da função: update()
+
+  Deletar
+    Requisição: DELETE
+    Rota: /companies/{company}
+    Nome da função: destroy()
