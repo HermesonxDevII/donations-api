@@ -20,11 +20,7 @@ def show(company_id: int, db: Session = Depends(database.get_db)):
     return db_company
 
 @router.post("/", response_model=schemas.Company, status_code=status.HTTP_201_CREATED, summary="Criar um perfil de empresa")
-def store(
-    company: schemas.CompanyCreate, 
-    db: Session = Depends(database.get_db),
-    current_user: models.User = Depends(get_current_user)
-):
+def store(company: schemas.CompanyCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
     if current_user.user_type != 2:
         raise HTTPException(status_code=403, detail="Apenas donos de empresa podem criar perfis de empresa.")
     if current_user.company:
@@ -33,16 +29,13 @@ def store(
     db_company = models.Company(**company.dict(), owner_id=current_user.id)
     db.add(db_company)
     db.commit()
-    db.refresh(db_company)
-    return db_company
+
+    return {
+        "message": "company created has successfully!"
+    }
 
 @router.put("/{company_id}", response_model=schemas.Company, summary="Atualizar uma empresa")
-def update(
-    company_id: int, 
-    company: schemas.CompanyCreate, 
-    db: Session = Depends(database.get_db),
-    current_user: models.User = Depends(get_current_user)
-):
+def update(company_id: int, company: schemas.CompanyCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
     db_company = db.query(models.Company).filter(models.Company.id == company_id).first()
     if db_company is None:
         raise HTTPException(status_code=404, detail="Empresa não encontrada")
@@ -54,15 +47,13 @@ def update(
         setattr(db_company, key, value)
     
     db.commit()
-    db.refresh(db_company)
-    return db_company
+
+    return {
+        "message": "company updated has successfully!"
+    }
 
 @router.delete("/{company_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Deletar uma empresa")
-def destroy(
-    company_id: int, 
-    db: Session = Depends(database.get_db),
-    current_user: models.User = Depends(get_current_user)
-):
+def destroy(company_id: int, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
     db_company = db.query(models.Company).filter(models.Company.id == company_id).first()
     if db_company is None:
         raise HTTPException(status_code=404, detail="Empresa não encontrada")
@@ -72,4 +63,7 @@ def destroy(
 
     db.delete(db_company)
     db.commit()
-    return None
+
+    return {
+        "message": "company deleted has successfully!"
+    }

@@ -87,9 +87,22 @@ class User(UserBase):
     class Config:
         from_attributes  = True
 
+class UserPublic(UserBase):
+    id: int
+    user_type: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class LoginResponse(BaseModel):
+    message: str
+    token: Token
 
 class TokenData(BaseModel):
     email: Optional[str] = None

@@ -8,7 +8,7 @@ from ..utils.security import create_access_token, get_password_hash, verify_pass
 
 router = APIRouter()
 
-@router.post("/register", response_model=schemas.User, summary="Registrar um novo usuário")
+@router.post("/register", response_model=schemas.LoginResponse, summary="Registrar um novo usuário")
 def signUp(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db_user_by_email = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user_by_email:
@@ -31,9 +31,23 @@ def signUp(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user
+    
+    token = create_access_token(
+        data={
+            "sub": db_user.email
+        },
+        expires_delta=timedelta(minutes=60)
+    )
+    
+    return {
+        "message": "User registered has successfully!",
+        "token": {
+            "access_token": token,
+            "token_type": "bearer"
+        }
+    }
 
-@router.post("/login", response_model=schemas.Token, summary="Autenticar um usuário")
+@router.post("/login", response_model=schemas.LoginResponse, summary="Autenticar um usuário")
 def signIn(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(database.get_db)
@@ -47,14 +61,17 @@ def signIn(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token_expires = timedelta(minutes=60)
-
-    access_token = create_access_token(
-        data={"sub": user.email},
-        expires_delta=access_token_expires
+    token = create_access_token(
+        data={
+            "sub": user.email
+        },
+        expires_delta=timedelta(minutes=60)
     )
     
     return {
-        "access_token": access_token,
-        "token_type": "bearer"
+        "message": "User logged has sucessfully!",
+        "token": {
+            "access_token": token,
+            "token_type": "bearer"
+        }
     }
