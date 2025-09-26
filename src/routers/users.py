@@ -8,11 +8,7 @@ from ..utils.security import create_access_token, get_password_hash, verify_pass
 
 router = APIRouter()
 
-@router.post(
-    "/register",
-    response_model=schemas.User,
-    summary="Registrar um novo usuário"
-)
+@router.post("/register", response_model=schemas.User, summary="Registrar um novo usuário")
 def signUp(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db_user_by_email = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user_by_email:
@@ -37,11 +33,7 @@ def signUp(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db.refresh(db_user)
     return db_user
 
-@router.post(
-    "/login",
-    response_model=schemas.Token,
-    summary="Autenticar um usuário"
-)
+@router.post("/login", response_model=schemas.Token, summary="Autenticar um usuário")
 def signIn(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(database.get_db)

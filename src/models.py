@@ -16,14 +16,14 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-    company = relationship("Company", back_populates="owner", uselist=False)
-    institution = relationship("Institution", back_populates="owner", uselist=False)
+    company = relationship("Company", back_populates="owner")
+    institution = relationship("Institution", back_populates="owner")
 
 class Company(Base):
     __tablename__ = "companies"
 
     id = Column(Integer, primary_key=True, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     cnpj = Column(String, unique=True, nullable=False)
     corporate_reason = Column(String, nullable=False)
     fantasy_name = Column(String, nullable=False)
@@ -44,7 +44,7 @@ class Institution(Base):
     __tablename__ = "institutions"
 
     id = Column(Integer, primary_key=True, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False, unique=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     cnpj = Column(String, unique=True, nullable=False)
     public_name = Column(String, nullable=False)
     street = Column(String, nullable=True)
