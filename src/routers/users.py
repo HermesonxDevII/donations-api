@@ -47,14 +47,11 @@ def signUp(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
         }
     }
 
-@router.post("/login", response_model=schemas.LoginResponse, summary="Autenticar um usuário")
-def signIn(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(database.get_db)
-):
-    user = db.query(models.User).filter(models.User.email == form_data.username).first()
+@router.post("/login", response_model=schemas.LoginResponse, summary="Autenticar um usuário via JSON")
+def signIn(login_data: schemas.LoginRequest, db: Session = Depends(database.get_db)):
+    user = db.query(models.User).filter(models.User.email == login_data.email).first()
 
-    if not user or not verify_password(form_data.password, user.hashed_password):
+    if not user or not verify_password(login_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="E-mail ou senha incorretos",
@@ -62,14 +59,12 @@ def signIn(
         )
 
     token = create_access_token(
-        data={
-            "sub": user.email
-        },
+        data={"sub": user.email},
         expires_delta=timedelta(minutes=60)
     )
     
     return {
-        "message": "User logged has sucessfully!",
+        "message": "User logged has successfully!",
         "token": {
             "access_token": token,
             "token_type": "bearer"
