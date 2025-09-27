@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "c12a19d0-816a-447e-9e54-bfac44c81d7c",
+		"name": "donations-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "33167844"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Hermeson 3\",\r\n  \"cpf\": \"12345678911\",\r\n  \"email\": \"hermeson3@teste.com\",\r\n  \"password\": \"purpurina\",\r\n  \"user_type\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/users/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"hermeson2@teste.com\",\r\n  \"password\": \"purpurina\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/users/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "company",
+			"item": [
+				{
+					"name": "index",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Bearer}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{BASE_URL}}/companies"
+					},
+					"response": []
+				},
+				{
+					"name": "store",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Bearer}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cnpj\": \"12345678910001\",\r\n  \"corporate_reason\": \"meusaico\",\r\n  \"fantasy_name\": \"meusaco\",\r\n  \"street\": \"aaaaaaaaaah\",\r\n  \"neighborhood\": \"apaga isso mds\",\r\n  \"number\": \"1\",\r\n  \"postal_code\": \"34502752\",\r\n  \"phone\": \"47594125514571\",\r\n  \"email\": \"user@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/companies"
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Bearer}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cnpj\": \"12345678910002\",\r\n  \"corporate_reason\": \"meusaico\",\r\n  \"fantasy_name\": \"meusaco\",\r\n  \"street\": \"aaaaaaaaaah\",\r\n  \"neighborhood\": \"apaga isso mds2\",\r\n  \"number\": \"2\",\r\n  \"postal_code\": \"34502752\",\r\n  \"phone\": \"47594125514571\",\r\n  \"email\": \"user@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BASE_URL}}/companies/1"
+					},
+					"response": []
+				},
+				{
+					"name": "destroy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Bearer}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cnpj\": \"12345678910002\",\r\n  \"corporate_reason\": \"meusaico\",\r\n  \"fantasy_name\": \"meusaco\",\r\n  \"street\": \"aaaaaaaaaah\",\r\n  \"neighborhood\": \"apaga isso mds2\",\r\n  \"number\": \"2\",\r\n  \"postal_code\": \"34502752\",\r\n  \"phone\": \"47594125514571\",\r\n  \"email\": \"user@example.com\"\r\n}"
+						},
+						"url": "{{BASE_URL}}/companies/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "institutions",
+			"item": []
+		},
+		{
+			"name": "donations",
+			"item": []
+		}
+	]
+}
