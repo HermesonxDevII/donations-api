@@ -11,7 +11,7 @@ class User(Base):
     cpf = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    user_type = Column(Integer, nullable=False) # 1 - admin, 2 - company_owner, 3 - institution_owner
+    user_type = Column(Integer, nullable=False)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())

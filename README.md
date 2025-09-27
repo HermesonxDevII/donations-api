@@ -36,12 +36,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### ✅ Gerar chave da aplicação
-
-```bash
-php artisan key:generate
-```
-
 ### ✅ Executar aplicação
 
 ```bash
