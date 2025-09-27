@@ -4,7 +4,7 @@
 
 - Todas as rotas de instituições tem o prefixo `/institutions` antes delas.
 
-- Essas rotas necessitam de um **token JWT** que deve ser usado no cabeçalho `Authorization` para fazer uso delas e o usuário tem que ser do tipo `3`, Para mais informações consulte [Authenticação](./authentication.md).
+- Essas rotas necessitam de um **token JWT** que deve ser usado no cabeçalho `Authorization` para fazer uso delas e o usuário tem que ser do tipo `3`, para mais informações consulte [Authenticação](./authentication.md).
 
 ```bash
 Authorization: Bearer {token}
