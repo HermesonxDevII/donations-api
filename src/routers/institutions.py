@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from typing import List
 
 from .. import models, schemas, database
@@ -16,47 +17,69 @@ def index(db: Session = Depends(database.get_db), skip: int = 0, limit: int = 10
 def show(institution_id: int, db: Session = Depends(database.get_db)):
     db_institution = db.query(models.Institution).filter(models.Institution.id == institution_id).first()
     if db_institution is None:
-        raise HTTPException(status_code=404, detail="Instituição não encontrada")
+        raise HTTPException(status_code=404, detail="Institution not found.")
     return db_institution
 
-@router.post("/", response_model=schemas.Institution, status_code=status.HTTP_201_CREATED, summary="Criar um perfil de instituição")
+@router.post("/", status_code=status.HTTP_201_CREATED, summary="Criar um perfil de instituição")
 def store(institution: schemas.InstitutionCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
     if current_user.user_type != 3:
-        raise HTTPException(status_code=403, detail="Apenas donos de instituição podem criar perfis de instituição.")
-    if current_user.institution:
-        raise HTTPException(status_code=400, detail="Este usuário já possui uma instituição cadastrada.")
+        raise HTTPException(status_code=403, detail="Only institution owners can create institution profiles.")
 
     db_institution = models.Institution(**institution.dict(), owner_id=current_user.id)
     db.add(db_institution)
-    db.commit()
-    db.refresh(db_institution)
-    return db_institution
+    
+    try:
+        db.commit()
+        db.refresh(db_institution)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="There is already a institution registered with this CNPJ."
+        )
 
-@router.put("/{institution_id}", response_model=schemas.Institution, summary="Atualizar uma instituição")
+    return {
+        "message": "institution created has successfully!"
+    }
+
+@router.put("/{institution_id}", summary="Atualizar uma instituição")
 def update(institution_id: int, institution: schemas.InstitutionCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
     db_institution = db.query(models.Institution).filter(models.Institution.id == institution_id).first()
     if db_institution is None:
-        raise HTTPException(status_code=404, detail="Instituição não encontrada")
+        raise HTTPException(status_code=404, detail="Institution not found.")
     
     if db_institution.owner_id != current_user.id and current_user.user_type != 1:
-        raise HTTPException(status_code=403, detail="Não autorizado a realizar esta ação")
+        raise HTTPException(status_code=403, detail="Not authorized to perform this action.")
 
     for key, value in institution.dict().items():
         setattr(db_institution, key, value)
     
-    db.commit()
-    db.refresh(db_institution)
-    return db_institution
+    try:
+        db.commit()
+        db.refresh(db_institution)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The CNPJ provided is already in use by another institution."
+        )
+
+    return {
+        "message": "institution updated has successfully!"
+    }
 
 @router.delete("/{institution_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Deletar uma instituição")
 def destroy(institution_id: int, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
     db_institution = db.query(models.Institution).filter(models.Institution.id == institution_id).first()
     if db_institution is None:
-        raise HTTPException(status_code=404, detail="Instituição não encontrada")
+        raise HTTPException(status_code=404, detail="Institution not found.")
         
     if db_institution.owner_id != current_user.id and current_user.user_type != 1:
-        raise HTTPException(status_code=403, detail="Não autorizado a realizar esta ação")
+        raise HTTPException(status_code=403, detail="Not authorized to perform this action.")
 
     db.delete(db_institution)
     db.commit()
-    return None
+    
+    return {
+        "message": "company deleted has successfully!"
+    }
