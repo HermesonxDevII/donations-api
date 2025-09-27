@@ -12,11 +12,11 @@ router = APIRouter()
 def signUp(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db_user_by_email = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user_by_email:
-        raise HTTPException(status_code=400, detail="Este e-mail já está em uso.")
+        raise HTTPException(status_code=400, detail="This email is already in use.")
     
     db_user_by_cpf = db.query(models.User).filter(models.User.cpf == user.cpf).first()
     if db_user_by_cpf:
-        raise HTTPException(status_code=400, detail="Este CPF já está cadastrado.")
+        raise HTTPException(status_code=400, detail="This CPF is already registered.")
 
     hashed_password = get_password_hash(user.password)
     
@@ -54,7 +54,7 @@ def signIn(login_data: schemas.LoginRequest, db: Session = Depends(database.get_
     if not user or not verify_password(login_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="E-mail ou senha incorretos",
+            detail="Incorrect email or password.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

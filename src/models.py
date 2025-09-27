@@ -16,8 +16,8 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-    company = relationship("Company", back_populates="owner")
-    institution = relationship("Institution", back_populates="owner")
+    companies = relationship("Company", back_populates="owner")
+    institutions = relationship("Institution", back_populates="owner")
 
 class Company(Base):
     __tablename__ = "companies"
@@ -37,7 +37,7 @@ class Company(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-    owner = relationship("User", back_populates="company")
+    owner = relationship("User", back_populates="companies")
     donations_made = relationship("Donation", back_populates="donor")
 
 class Institution(Base):
@@ -59,7 +59,7 @@ class Institution(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
-    owner = relationship("User", back_populates="institution")
+    owner = relationship("User", back_populates="institutions")
     donations_received = relationship("Donation", back_populates="receiver")
 
 class Donation(Base):

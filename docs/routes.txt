@@ -4,17 +4,17 @@ GET, HEAD  | /openapi.json                  | openapi
 GET, HEAD  | /docs                          | swagger_ui_html
 GET, HEAD  | /docs/oauth2-redirect          | swagger_ui_redirect
 GET, HEAD  | /redoc                         | redoc_html
-POST       | /users/register                | signUp
-POST       | /users/login                   | signIn
-GET        | /companies/                    | index
-GET        | /companies/{company_id}        | show
-POST       | /companies/                    | store
-PUT        | /companies/{company_id}        | update
-DELETE     | /companies/{company_id}        | destroy
-GET        | /institutions/                 | index
-GET        | /institutions/{institution_id} | show
-POST       | /institutions/                 | store
-PUT        | /institutions/{institution_id} | update
-DELETE     | /institutions/{institution_id} | destroy
-POST       | /donations/                    | store
+POST       | /users/register                | users.signUp
+POST       | /users/login                   | users.signIn
+GET        | /companies/                    | companies.index
+GET        | /companies/{company_id}        | companies.show
+POST       | /companies/                    | companies.store
+PUT        | /companies/{company_id}        | companies.update
+DELETE     | /companies/{company_id}        | companies.destroy
+GET        | /institutions/                 | institutions.index
+GET        | /institutions/{institution_id} | institutions.show
+POST       | /institutions/                 | institutions.store
+PUT        | /institutions/{institution_id} | institutions.update
+DELETE     | /institutions/{institution_id} | institutions.destroy
+POST       | /donations/                    | donations.store
 GET        | /                              | read_root
