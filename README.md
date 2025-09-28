@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 - Após os passos acima abra o projeto no vs code para editar as variáveis de ambiente, se ja estiver no diretorio dele no terminal basta digitar `code .` que o projeto sera aberto.
 
-- Dentro do projeto basta editar o nome do arquivo `.env.exmaple` para `.env` e preencher as variáveis de la que são essas abaixo.
+- Dentro do projeto basta editar o nome do arquivo `.env.example` para `.env` e preencher as variáveis de la que são essas abaixo.
 
 ```bash
 DATABASE_URL=
